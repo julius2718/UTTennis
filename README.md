@@ -5,7 +5,7 @@
 
 Google Spreadsheet のデータにアクセスするための設定が必要。`gspread`ライブラリを利用する。
 
-設定の方法はこれ(https://tanuhack.com/library-gspread/#i-5)を参照のこと。
+設定の方法はこれ( https://tanuhack.com/library-gspread/#i-5 )を参照のこと。
 
 # GAS コードの使い方
 
