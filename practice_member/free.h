@@ -5,6 +5,9 @@
 //  Created by 長澤達也 on 2019/11/06.
 //  Copyright © 2019 長澤達也. All rights reserved.
 //
+/*役割
+   各種構造体のメモリ解放を行うfree関数たち.
+*/
 
 #ifndef free_h
 #define free_h

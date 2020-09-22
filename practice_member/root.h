@@ -28,9 +28,4 @@
 #define SELECTION 0.7   //選択による個体生成率
 #define CROSSOVER 0.1   //交叉による個体生成時の部分突然変異率
 
-/*
- double p_select; //次世代に選択で作る確率
- double p_mutation; //突然変異で作る確率
- double p_mutation_in_crossover; //交叉中の突然変異確率
- */
 #endif /* root_h */

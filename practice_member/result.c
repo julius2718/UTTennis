@@ -104,7 +104,7 @@ void print_csv(info f,individual a){
 }
 
 
-//***差し替え
+
 void print_score(info f,individual a){
     //点数の詳細を出力
     score_data data = f->score_data;
@@ -114,7 +114,7 @@ void print_score(info f,individual a){
     double rank_score = 0;
     double min_rank_score = 100000;
     int min_r_s_day = -1; //rankscoreの最も低い日
-    double *interval_score_list,*equality_score_list;
+    double *personal_score_interval_list,*personal_score_equality_list;
     double s_prac_score;
     int *n,*m,*l;
     char day[10][10] = {"月朝","月夜","火朝","火夜","水朝","水夜","木朝","木夜","金朝","金夜"};
@@ -122,8 +122,8 @@ void print_score(info f,individual a){
     four = 0;   //４人面の数
     impo = 0;   //コート不成立の数
     NEW(n,f->people+1);NEW(m,f->people+1);NEW(l,f->people+1)    //n:1日2回練習の人.m:夜->朝の連続の人.[0]が人数,[1]以降がそのrank
-    NEW(interval_score_list,f->people+1);   //[f->people+1]は合計点
-    NEW(equality_score_list,f->people+1);
+    NEW(personal_score_interval_list,f->people+1);   //[f->people+1]は合計点
+    NEW(personal_score_equality_list,f->people+1);
     //面の人数による点数
     for(i=0;i<DAY;i++){
         if(det->courts[i]->num_of_court[0]==0 &&det->courts[i]->sum_num != 0){
@@ -169,26 +169,26 @@ void print_score(info f,individual a){
         }
     }
     //personal_scoreの点数リスト
-    n[0]=0;m[0]=0;l[0]=0;interval_score_list[f->people]=0;equality_score_list[f->people]=0;
+    n[0]=0;m[0]=0;l[0]=0;personal_score_interval_list[f->people]=0;personal_score_equality_list[f->people]=0;
     for(i=0;i<f->people;i++){
-        interval_score_list[i] = interval_score(f,det->players[i]);
-        if(interval_score_list[i] == data->p_inter->same_day){
+        personal_score_interval_list[i] = personal_score_interval(f,det->players[i]);
+        if(personal_score_interval_list[i] == data->p_inter->same_day){
             n[0]++;
             n[n[0]] = i;
-        }else if(interval_score_list[i] == data->p_inter->night_to_morning){
+        }else if(personal_score_interval_list[i] == data->p_inter->night_to_morning){
             m[0]++;
             m[m[0]] = i;
         }else{
-            interval_score_list[f->people] += interval_score_list[i];
+            personal_score_interval_list[f->people] += personal_score_interval_list[i];
         }
-        equality_score_list[i] = equality_score(f,det->players[i]);
-        if(equality_score_list[i]< 0){
+        personal_score_equality_list[i] = personal_score_equality(f,det->players[i]);
+        if(personal_score_equality_list[i]< 0){
             l[0] ++;
             l[l[0]] = i;
         }
-        equality_score_list[f->people] += equality_score_list[i];
+        personal_score_equality_list[f->people] += personal_score_equality_list[i];
     }
-    s_prac_score = short_prac_score(f,a);
+    s_prac_score = personal_score_2period(f,a);
     /*求める内容
      練習スコア->court_score(f,court*)
      *組み分け不能数impo->court*[i]のnum_of_courtで確認
@@ -196,7 +196,7 @@ void print_score(info f,individual a){
      *ランク差による点数rank_score->court*[i]のcourt_score_rank(f,court)の合計
      *上記の最低点min_rank_score->上記と同時に計算
      個人スコア->parsonal_score(f,a,det)
-     *練習時間による点数n,m,l,interval_score_list->inteval_score(f,det)による計算
+     *練習時間による点数n,m,l,personal_score_interval_list->inteval_score(f,det)による計算
      *練習面による点数->equality scoreによる計算
     */
     
@@ -226,8 +226,8 @@ void print_score(info f,individual a){
         for(i=1;i<=m[0];i++)printf("%s ",f->name[m[i]]);
         printf("\n");
     }
-    printf("    それ以外の人の練習間隔による点数は, %.1f点\n",interval_score_list[f->people]);
-    printf("    上のランクと練習できるかによる点数は, %.1f点\n",equality_score_list[f->people]);
+    printf("    それ以外の人の練習間隔による点数は, %.1f点\n",personal_score_interval_list[f->people]);
+    printf("    上のランクと練習できるかによる点数は, %.1f点\n",personal_score_equality_list[f->people]);
     printf("        上の人と練習できない人数は%d人\n",l[0]);
     if(l[0] > 0){
         printf("            その人の名前は:");
@@ -236,6 +236,6 @@ void print_score(info f,individual a){
     }
     printf("    2限抜けする人数による点数は, %.1f点\n",s_prac_score);
     SAFE_FREE(n);SAFE_FREE(m);SAFE_FREE(l);
-    SAFE_FREE(interval_score_list);SAFE_FREE(equality_score_list);
+    SAFE_FREE(personal_score_interval_list);SAFE_FREE(personal_score_equality_list);
     free_detail(f,det);
 }

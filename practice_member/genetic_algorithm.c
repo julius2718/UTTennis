@@ -20,7 +20,7 @@ void genetic_algorithm(const char* fname,int opt){
     for(i=0;i<max_people;i++)personal_list[i]=NULL;
     //ファイルの読み込み,入力の設定
     people = load_file(personal_list,fname);
-    if(people==-1)exit(1);//エラー終了
+    if(people==-1)exit(EXIT_FAILURE);//エラー終了
     f = info_build(people,personal_list);
     free_personal(people,personal_list);    //personal_listはinfo_buildで用済み
     //初代の作成

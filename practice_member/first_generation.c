@@ -23,17 +23,3 @@ generation first_generation(info f){
     return g;
 }
 
-
-generation take_over_generation(info f,generation g){
-    //そのままgeneを引き継ぐ
-    int i;
-    generation g_next = new_generation(f);
-    g->gene = 0;
-    for(i=0;i<N_GENE;i++){
-        g_next->indi[i] = copy_individual(f,g->indi[i]);
-        g_next->indi[i]->gene = 0;
-        g_next->indi[i]->number = i;
-    }
-    rank_build(f,g_next);
-    return g_next;
-}

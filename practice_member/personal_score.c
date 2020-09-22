@@ -8,24 +8,24 @@
 
 #include "personal_score.h"
 
-double interval_score(info f,player me);
-double equality_score(info f,player me);
-double short_prac_score(info f,individual a);
+double personal_score_interval(info f,player me);
+double personal_score_equality(info f,player me);
+double personal_score_2period(info f,individual a);
 
 double personal_score(info f,individual a,detail det){
      double score = 0;
      int i;
      for(i=0;i<f->people;i++){
-         score += interval_score(f,det->players[i]);
-         score += equality_score(f,det->players[i]);
+         score += personal_score_interval(f,det->players[i]);
+         score += personal_score_equality(f,det->players[i]);
      }
-     score += short_prac_score(f,a);
+     score += personal_score_2period(f,a);
      return score;
 }
 
 //2回の練習日程の間隔によるスコア
 //練習が2回以外を実装する場合は要変更
-double interval_score(info f,player me){
+double personal_score_interval(info f,player me){
      personal_interval data = f->score_data->p_inter;
      double score = 0;
      int d1,d2;
@@ -76,7 +76,7 @@ double interval_score(info f,player me){
  }
 //自分より上の人と練習できるかによるスコア
 //一緒に練習する最高位の人で判断
-double equality_score(info f,player me){
+double personal_score_equality(info f,player me){
     personal_equality data = f->score_data->p_equ;
     double score = 0;
     int i,best_rank;
@@ -98,7 +98,7 @@ double equality_score(info f,player me){
  }
 
 //2限抜けの回数による減点
-double short_prac_score(info f,individual a){
+double personal_score_2period(info f,individual a){
     personal_short_prac data = f->score_data->p_short;
     double score = 0;
     int i,j,c;
@@ -116,7 +116,7 @@ double short_prac_score(info f,individual a){
             case 0:
                 break;
             default:
-                printf("error in short_prac_score.c=%dに計算異常があります\n",c);
+                printf("error in personal_score_2period.c=%dに計算異常があります\n",c);
                 break;
         }
     }

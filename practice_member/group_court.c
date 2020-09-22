@@ -5,14 +5,7 @@
 //  Created by 長澤達也 on 2019/11/05.
 //  Copyright © 2019 長澤達也. All rights reserved.
 //
-/*
-input_mycourtでme->first_pracやsecond_pracにnew_courtを入れるタイミングで,なぜかごく稀にme->numberも変化する不具合.
-personal_score内のmember_listでme->numberを使用する際にエラーを吐く.
-変化する時は,同じcourt状況の時に複数発生し,変化先のnumberも固定.
-me->numberの代入を後回しにすることで回避したが原因は不明.
-たまにメモリのアクセスエラーが出るのも含め,mallocでの確保関連で衝突が起きていそう.
-#new_courtでaが初期化されててBAD_ACCESSになる不具合あり.突然変異によるランダム生成時に発生か.
- */
+
 
 #include "group_court.h"
 

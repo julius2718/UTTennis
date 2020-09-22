@@ -8,6 +8,24 @@
 
 #include "next_generation.h"
 
+individual select_individual(info f,generation g){
+    //rankに基づいた確率で親を選ぶ(良い個体ほど選ばれやすい)
+    int i;
+    individual a = g->indi[0];
+    double p = (double)rand()/RAND_MAX;
+    double sum = 0;
+    for(i=0;i<N_GENE;i++){
+        sum += g->rank[i];
+        if(sum>=p){
+            a = g->indi[i];
+            return a;
+        }
+    }
+    printf("error in select_individual.抽選値pを確認してください.\n");
+    return a;
+}
+
+
 individual selection(info f,generation g){
     //選択法による次世代新個体の作成.部分的突然変異を入れるのもあり.
     individual a,parent;
