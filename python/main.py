@@ -27,6 +27,7 @@ df.drop(0, inplace=True)
 df.reset_index(inplace=True)
 df.drop('index', axis=1, inplace=True)
 df['学年'] = df['学年'].astype(int)
+df['練習回数'] = df['希望する練習回数'].astype(int)
 
 days = ['月', '火', '水', '木', '金']
 times = ['朝', '夜']
