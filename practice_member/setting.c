@@ -38,6 +38,18 @@ court_sum set_court_sum(void){
     return c_sum;
 }
 
+court_year set_court_year(void){
+    //各練習の学年による評価.
+    //各面で同学年のみだと低評価。特に最低学年のみの時は大幅減点
+    //4面全体の中に最高学年がいないと減点
+    court_year c_year;
+    NEW(c_year,1);
+    c_year->same_grade = -300; //全員同じ学年の練習での減点
+    c_year->first_grade = -5000;    //最低学年のみの練習での追加減点
+    c_year->final_grade = -500;  //全体で最高学年不在時の減点
+    return c_year;
+}
+
 personal_interval set_personal_interval(void){
     //各人の練習間隔による評価.
     //同日の練習や夜->朝は振り切った減点.
@@ -90,6 +102,7 @@ info info_build(int people,personal* plist){
     //初期値や入力データを保持するinfoの設定
     //f->count_pracは未使用
     int i,j,p,c,cf;p=0;
+    int min_year,max_year;min_year=100;max_year=0;
     info f;
     NEW(f,1);
     f->people = people;
@@ -113,9 +126,14 @@ info info_build(int people,personal* plist){
         f->count_fix[i] = cf;
         while(plist[p]==NULL)p++;
         f->year[i] = plist[p]->year;
+        if(f->year[i] < min_year)min_year = f->year[i];
+        if(f->year[i] > max_year)max_year = f->year[i];
         f->rank[i] = plist[p]->rank;
+
         p++;
     }
+    f->min_year = min_year;
+    f->max_year = max_year;
     //print_info(f);    //test用出力
     return f;
 }
@@ -125,6 +143,7 @@ score_data set_score(void){
     NEW(data,1);
     data->c_rank = set_court_rank();
     data->c_sum = set_court_sum();
+    data->c_year = set_court_year();
     data->p_inter = set_personal_interval();
     data->p_equ = set_personal_equality();
     data->p_short = set_personal_short_prac();
@@ -187,6 +206,16 @@ char** make_namelist(int people,personal* plist){
         p++;
     }
     return list;
+}
+
+int list_max(int* a,int n){
+    //最大値をあたえる要素番号を返す.n:要素数
+    int ans = 0;
+    int i;
+    for(i=1;i<n;i++){
+        if(a[ans]<a[i])ans = i;
+    }
+    return ans;
 }
 
 /*

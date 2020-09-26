@@ -21,7 +21,7 @@
 typedef struct{ //各選手の情報
     int rank; //ランク
     int year;
-    char *name; //名前
+    char *name; //氏名
     int *list; //メインの練習日程
 }*personal;
 

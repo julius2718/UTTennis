@@ -82,6 +82,7 @@ void free_score_data(score_data data){
     SAFE_FREE(data->p_equ);
     SAFE_FREE(data->c_rank);
     SAFE_FREE(data->c_sum);
+    SAFE_FREE(data->c_year);
     SAFE_FREE(data);
 }
 

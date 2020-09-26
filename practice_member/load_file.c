@@ -103,7 +103,7 @@ int print_person_data(personal* plist,int people){
     i=0;p=0;
     while(p<people){
         if(plist[i]!=NULL){
-            printf("名前:%s,学年:%d,ランク:%dの練習可能日程は",plist[i]->name,plist[i]->year,plist[i]->rank);
+            printf("氏名:%s,学年:%d,ランク:%dの練習可能日程は",plist[i]->name,plist[i]->year,plist[i]->rank);
             for(d=0;d<10;d++){
                 if(plist[i]->list[d]!=0)printf(" %s",day[d]);
             }

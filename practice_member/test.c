@@ -15,7 +15,7 @@ int random_year(double rate){
     double a;
     a = (rand()+1.0)/(RAND_MAX+2.0);
     b = rand()%4;
-    a = (a*b+1-rate)/(b+1);
+    a = (a*b*2+1-rate)/(b*2+1);
     year = (int)(a*4)+1;
     return year;
 }

@@ -20,6 +20,7 @@ double court_score(info f,detail det){
         det->courts[j]->score = 0;
         det->courts[j]->score += court_score_sum(f,det->courts[j]);
         det->courts[j]->score += court_score_rank(f,det->courts[j]);
+        det->courts[j]->score += court_score_year(f, det->courts[j]);
         score += det->courts[j]->score;
     }
     return score;
@@ -31,7 +32,7 @@ double court_score_rank(info f,court x){
     int acp = data->accept_number;int lim = data->limit_number;
     int ded1 = data->deduce_point1;int ded2 = data->deduce_point2;
     if(x->num_of_court[0]==0)return 0; //面が存在しなければ無視
-    int i,max_i,min_i,dif;
+    int i,min_i,max_i,dif;
     double score = 0;
     i = 0;min_i = 0;dif=0;
     while(min_i<x->sum_num){
@@ -97,7 +98,25 @@ double court_score_sum(info f,court x){
 
 double court_score_year(info f,court x){
     //面内の学年による評価.未設定
+    court_year data = f->score_data->c_year;
     double score=0;
+    if(x->num_of_court[0]==0)return 0;
+    int i,j,min_i,max_i,count;
+    min_i=0;max_i=0;i=0;
+    while(min_i<x->sum_num){
+        max_i = min_i + x->num_of_court[i]-1;
+        //ここに評価
+        count=0;
+        for(j=min_i;j<max_i;j++)count += abs(x->year[j+1]-x->year[j]);
+        if(count==0){
+            score += data->same_grade;  //全部同学年なら低評価
+            if(x->year[min_i]==f->min_year)score += data->first_grade;  //一年生なら大幅減点
+        }
+        i++;
+        min_i = max_i +1;
+    }
+    //全体に最高学年がいないと減点
+    if(x->year[list_max(x->year, x->sum_num)]<f->max_year)score += data->final_grade;
     return score;
 }
 

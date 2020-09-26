@@ -9,7 +9,7 @@
 
 #include "group_court.h"
 
-int list_max(int* a,int n);
+
 void select_group(court x);
 court new_court(info f,individual a,int day);
 player new_player(info f,individual a,court* courts,int number);
@@ -341,14 +341,6 @@ void select_group(court x){
     SAFE_FREE(score);
 }
 
-int list_max(int* a,int n){
-    //最大値をあたえる要素番号を返す.n:要素数
-    int ans = 0;
-    int i;
-    for(i=1;i<n;i++){
-        if(a[ans]<a[i])ans = i;
-    }
-    return ans;
-}
+
 
 

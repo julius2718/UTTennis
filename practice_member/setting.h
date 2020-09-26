@@ -35,6 +35,13 @@ typedef struct{
 }*court_sum;
 
 typedef struct{
+    //court_score_yearでの点数決定係数
+    int same_grade; //全員同じ学年の練習での減点
+    int first_grade;  //最低学年のみの練習での追加減点
+    int final_grade;   //全体で最高学年不在時の減点
+}*court_year;
+
+typedef struct{
     int same_day;   //同一日の練習での減点
     int row_morning;    //連続朝練での減点
     int row_night;  //連続夜練での減点
@@ -61,6 +68,7 @@ typedef struct{
 typedef struct{
     court_rank c_rank;
     court_sum c_sum;
+    court_year c_year;
     personal_interval p_inter;
     personal_equality p_equ;
     personal_short_prac p_short;
@@ -75,11 +83,14 @@ typedef struct{
     int *count_can; //各人の固定以外の練習可能回数
     int *count_fix; //各人の固定で入る練習回数
     int *year; //各人の学年
+    int min_year;   //全体の最低学年
+    int max_year;   //全体の最高学年
     int *rank; //各人のランク
-    char **name; //各人の名前
+    char **name; //各人の氏名
     score_data score_data;
 }*info;
 
 info info_build(int people,personal* plist);
+int list_max(int* a,int n);
 
 #endif /* setting_h */

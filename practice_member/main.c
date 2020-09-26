@@ -19,7 +19,9 @@ int main(int argc, const char * argv[]) {
     //make_testfile2(10);
      if(argc>1){
         genetic_algorithm(argv[1],0);
-    }
+     }else{
+         printf("入力が不正です.入力を確認してください.\n");
+     }
     return 0;
 }
 

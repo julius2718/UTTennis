@@ -16,11 +16,13 @@ void print_generation(info f,generation g){
     //各世代の最高評価値を出力
     printf("第%d世代が作成されました.最高評価個体を出力します.\n\n",g->gene);
     //print_individual(f,g->indi[g->max_indi]);
+    printf("****** start printing result *****\n");
     print_csv(f,g->indi[g->max_indi]);
     printf("\nこの個体の点数の詳細です.\n");
     print_score(f,g->indi[g->max_indi]);
     printf("\nメーリス形式の出力です.\n");
     print_result(f,g->indi[g->max_indi]);
+    printf("****** finish printing result *****\n");
 }
 
 void print_member(info f,court x,char** name){
@@ -70,50 +72,57 @@ void print_result(info f,individual a){
 
 void print_csv(info f,individual a){
     int i,j,x,y,z;
-    printf("ランク,名前,月朝,月夜,火朝,火夜,水朝,水夜,木朝,木夜,金朝,金夜\n");
+    FILE *fp;
+    char filename[] = "practice_daylist.csv";fp = fopen(filename,"w");
+    fprintf(fp,"ランク,氏名,学年,月朝,月夜,火朝,火夜,水朝,水夜,木朝,木夜,金朝,金夜\n");
+    printf("ランク,氏名,学年,月朝,月夜,火朝,火夜,水朝,水夜,木朝,木夜,金朝,金夜\n");
     for(i=0;i<f->people;i++){
-        printf("%d,",f->rank[i]);
-        printf("%s,",f->name[i]);
+        printf("%d,",f->rank[i]);fprintf(fp,"%d,",f->rank[i]);
+        printf("%s,",f->name[i]);fprintf(fp,"%s,",f->name[i]);
+        printf("%d",f->year[i]);fprintf(fp,"%d",f->year[i]);
         for(j=0;j<DAY;j++){
             x = f->list[i][j];  //練習できるか
             y = f->short_list[i][j] * 10;  //2限抜けか
             z = a->list[i][j] * 100;       //練習に入っているか
             switch (x+y+z) {
                 case 0:
-                    printf(",");
+                    printf(",");fprintf(fp,",");
                     break;
                 case 1:
-                    printf("◯,");
+                    printf(",◯");fprintf(fp,",◯");
                     break;
                 case 11:
-                    printf("△,");
+                    printf(",△");fprintf(fp,",△");
                     break;
                 case 101:
-                    printf("●,");
+                    printf(",●");fprintf(fp,",●");
                     break;
                 case 111:
-                    printf("▲,");
+                    printf(",▲");fprintf(fp,",▲");
                     break;
                 default:
                     printf("\nerror in [%d][%d]. x+y+z = %dです.\n",i,j,x+y+z);
                     break;
             }
         }
-        printf("\n");
+        printf("\n");fprintf(fp,"\n");
     }
+    fclose(fp);
+    printf("%s に結果を保存しました\n",filename);
 }
-
-
 
 void print_score(info f,individual a){
     //点数の詳細を出力
     score_data data = f->score_data;
     detail det = detail_of_individual(f,a);
     int i,three,four,impo;
-    double r_s; //rank_scoreの一時変数
+    double r_s,y_s; //rank_score,year_scoreの一時変数
     double rank_score = 0;
+    double year_score = 0;
     double min_rank_score = 100000;
+    double min_year_score = 100000;
     int min_r_s_day = -1; //rankscoreの最も低い日
+    int min_y_s_day = -1; //yearscoreの最も低い日
     double *personal_score_interval_list,*personal_score_equality_list;
     double s_prac_score;
     int *n,*m,*l;
@@ -162,10 +171,16 @@ void print_score(info f,individual a){
     //面内のランク差による点数
     for(i=0;i<DAY;i++){
         r_s = court_score_rank(f,det->courts[i]);
+        y_s = court_score_year(f,det->courts[i]);
         rank_score += r_s;
+        year_score += y_s;
         if(r_s < min_rank_score){
             min_rank_score = r_s;
             min_r_s_day = i;
+        }
+        if(y_s < min_year_score){
+            min_year_score = y_s;
+            min_y_s_day = i;
         }
     }
     //personal_scoreの点数リスト
@@ -211,18 +226,20 @@ void print_score(info f,individual a){
     printf("        4人面の数: %d * %d点\n",four,data->c_sum->four);
     printf("    面内のランク差による点数: %.1f点\n",rank_score);
     printf("        最低点は %.1f点でその練習は%s\n",min_rank_score,day[min_r_s_day]);
+    printf("    学年バランスによる点数: %.1f点\n",year_score);
+    printf("        最低点は %.1f点でその練習は%s\n",min_year_score,day[min_y_s_day]);
     //個人スコア
     printf("個人スコア: %.1f\n",personal_score(f,a,det));
     printf("個人スコアの詳細\n");
     printf("    1日2回の練習の人数: %d人 * %d点\n",n[0],data->p_inter->same_day);
     if(n[0] > 0){
-        printf("        その人の名前は:");
+        printf("        その選手名は:");
         for(i=1;i<=n[0];i++)printf("%s ",f->name[n[i]]);
         printf("\n");
     }
     printf("    夜->朝の連日練習の人数: %d人 * %d点\n",m[0],data->p_inter->night_to_morning);
     if(m[0] > 0){
-        printf("        その人の名前は:");
+        printf("        その選手名は:");
         for(i=1;i<=m[0];i++)printf("%s ",f->name[m[i]]);
         printf("\n");
     }
@@ -230,7 +247,7 @@ void print_score(info f,individual a){
     printf("    上のランクと練習できるかによる点数は, %.1f点\n",personal_score_equality_list[f->people]);
     printf("        上の人と練習できない人数は%d人\n",l[0]);
     if(l[0] > 0){
-        printf("            その人の名前は:");
+        printf("            その選手名は:");
         for(i=1;i<=l[0];i++)printf("%s ",f->name[l[i]]);
         printf("\n");
     }
