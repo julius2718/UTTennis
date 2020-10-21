@@ -34,7 +34,7 @@ court_sum set_court_sum(void){
     NEW(c_sum,1);
     c_sum->impossible = -10000; //面分け不能時の減点係数
     c_sum->three = -50;    //3人面での加減点
-    c_sum->four = 0;  //4人面での加点
+    c_sum->four = 300;  //4人面での加点
     return c_sum;
 }
 
@@ -44,9 +44,9 @@ court_year set_court_year(void){
     //4面全体の中に最高学年がいないと減点
     court_year c_year;
     NEW(c_year,1);
-    c_year->same_grade = -300; //全員同じ学年の練習での減点
+    c_year->same_grade = -200; //全員同じ学年の練習での減点
     c_year->first_grade = -5000;    //最低学年のみの練習での追加減点
-    c_year->final_grade = -500;  //全体で最高学年不在時の減点
+    c_year->final_grade = -300;  //全体で最高学年不在時の減点
     return c_year;
 }
 

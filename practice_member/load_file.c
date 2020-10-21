@@ -41,9 +41,8 @@ int load_file(personal* plist,const char* fname){
         printf(" 1行目が正常に読み込まれませんでした.ファイルを確認してください.\n");
         fclose(fp);return -1;
     }else if(strcmp(data,f_line)!=0){
-        printf("error in load_file.\n");
-        printf(" 1行目が正しくありません.書式を確認してください.\n");
-        fclose(fp);return -1;
+        printf("caution in load_file!\n");
+        printf(" 1行目の書式を確認してください.正しく読み込めない可能性があります\n");
     }
     //2行目以降の確認&plistへの格納
     while(fgets(data,N,fp)!=NULL){  //一行ずつ読み込み,persondataに格納
@@ -54,6 +53,7 @@ int load_file(personal* plist,const char* fname){
     }
     fclose(fp);
     printf("***** finish loading csv file *****\n");
+    sleep(2);
     //入力データの表示
     print_person_data(plist,people);
     return people;
@@ -103,7 +103,7 @@ int print_person_data(personal* plist,int people){
     i=0;p=0;
     while(p<people){
         if(plist[i]!=NULL){
-            printf("氏名:%s,学年:%d,ランク:%dの練習可能日程は",plist[i]->name,plist[i]->year,plist[i]->rank);
+            printf("%s(%d年,%d位)の練習可能日程は",plist[i]->name,plist[i]->year,plist[i]->rank);
             for(d=0;d<10;d++){
                 if(plist[i]->list[d]!=0)printf(" %s",day[d]);
             }
@@ -115,6 +115,7 @@ int print_person_data(personal* plist,int people){
         i++;
     }
     printf("***** check input deta *****\n");
+    sleep(1);
     return 0;
 }
 

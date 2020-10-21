@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #define NEW(p,n){p=malloc((n)*sizeof(p[0]));};
 #define SAFE_FREE(ptr){\
     free(ptr);\

@@ -17,12 +17,12 @@ void print_generation(info f,generation g){
     printf("第%d世代が作成されました.最高評価個体を出力します.\n\n",g->gene);
     //print_individual(f,g->indi[g->max_indi]);
     printf("****** start printing result *****\n");
-    print_csv(f,g->indi[g->max_indi]);
+    print_csv(f,g->indi[g->max_indi]);sleep(1);
     printf("\nこの個体の点数の詳細です.\n");
-    print_score(f,g->indi[g->max_indi]);
+    print_score(f,g->indi[g->max_indi]);sleep(1);
     printf("\nメーリス形式の出力です.\n");
     print_result(f,g->indi[g->max_indi]);
-    printf("****** finish printing result *****\n");
+    printf("****** finish printing result *****\n");sleep(1);
 }
 
 void print_member(info f,court x,char** name){
