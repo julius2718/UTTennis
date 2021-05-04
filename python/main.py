@@ -16,7 +16,7 @@ import ranking
 gc = ga.gauth()
 
 # Spreadsheetを取得
-SPREADSHEET_KEY = '1yQp6dA7wSn8_x3s2J26aDl4qSBsI0C69UGpq8BNKayk' # Google Formsの出力先シートのID
+SPREADSHEET_KEY = 'YOUR_SHEETID_HERE' # Google Formsの出力先シートのID
 worksheet = gc.open_by_key(SPREADSHEET_KEY).sheet1
 
 # ---ここからデータ処理---
