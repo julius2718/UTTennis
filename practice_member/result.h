@@ -16,11 +16,10 @@
 #define result_h
 
 #include <stdio.h>
-#include "scoring.h"
+#include "result_scoring.h"
 
 void print_generation(info f,generation g);
 void print_result(info f,individual a);
-void print_score(info f,individual a);
 void print_csv(info f,individual a);
 
 #endif /* result_h */

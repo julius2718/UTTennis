@@ -20,11 +20,11 @@ int random_year(double rate){
     return year;
 }
 
-int random_dayprint(int* list,FILE *fp){
+int random_dayprint(int* list,FILE *fp,int day){
     int j,c,d;
     while(1){
         c = 0;
-        for(j=0;j<DAY;j++){
+        for(j=0;j<day;j++){
             d = rand()%(rand()%6+2);
             if(d==1){
                 list[j]=1;
@@ -40,25 +40,36 @@ int random_dayprint(int* list,FILE *fp){
     return 0;
 }
 
-int make_testfile(int people){
+int make_testfile(int people,int d){
+    //グローバル変数DAYは用いず個別に設定->d
     printf("****** start making test csv file *****\n");
     FILE *fp;
     char filename[] = "TestData.csv";
     int i,j,year;
     int* daylist;
-    NEW(daylist,DAY);
+    NEW(daylist,d);
     fp = fopen(filename,"w");
-    fprintf(fp,"氏名,学年,月朝,月夜,火朝,火夜,水朝,水夜,木朝,木夜,金朝,金夜,ランク\n");
-    printf("氏名,学年,月朝,月夜,火朝,火夜,水朝,水夜,木朝,木夜,金朝,金夜,ランク\n");
+    if(d==10){
+    fprintf(fp,"氏名,学年,ランク,月朝,月夜,火朝,火夜,水朝,水夜,木朝,木夜,金朝,金夜\n");
+    printf("氏名,学年,ランク,月朝,月夜,火朝,火夜,水朝,水夜,木朝,木夜,金朝,金夜\n");
+    }else if(d==15){
+        fprintf(fp,"氏名,学年,ランク,月朝,月昼,月夜,火朝,火昼,火夜,水朝,水昼,水夜,木朝,木昼,木夜,金朝,金昼,金夜\n");
+        printf("氏名,学年,ランク,月朝,月昼,月夜,火朝,火昼,火夜,水朝,水昼,水夜,木朝,木昼,木夜,金朝,金昼,金夜\n");
+    }else{
+        printf("練習回数が不適です\n");
+        fclose(fp);
+        return -1;
+    }
     for(i=1;i<=people;i++){
-        fprintf(fp,"test%d,",i);printf("test%d,",i);
+        fprintf(fp,"test%d",i);printf("test%d",i);
         year = random_year((double)i/people);
-        fprintf(fp,"%d,",year);printf("%d,",year);
-        random_dayprint(daylist,fp);
-        for(j=0;j<DAY;j++){
-            fprintf(fp,"%d,",daylist[j]);printf("%d,",daylist[j]);
+        fprintf(fp,",%d",year);printf(",%d",year);
+        fprintf(fp,",%d",i);printf(",%d",i);
+        random_dayprint(daylist,fp,d);
+        for(j=0;j<d;j++){
+            fprintf(fp,",%d",daylist[j]);printf(",%d",daylist[j]);
         }
-        fprintf(fp,"%d\n",i);printf("%d\n",i);
+        fprintf(fp,"\n");printf("\n");
     }
     SAFE_FREE(daylist);
     fclose(fp);
@@ -66,28 +77,39 @@ int make_testfile(int people){
     return 0;
 }
 
-int make_testfile2(int people){
+int make_testfile2(int people,int d){
     //ランクの重複や飛びのあるテストファイルを作成
     //ランクを1-max_peopleの中からランダムに選択
+    //グローバル変数DAYは用いず個別に設定->d
     printf("****** start making test csv file *****\n");
     FILE *fp;
     char filename[] = "TestData2.csv";
     int i,j,year,rank;
     int* daylist;
-    NEW(daylist,DAY);
+    NEW(daylist,d);
     fp = fopen(filename,"w");
-    fprintf(fp,"氏名,学年,月朝,月夜,火朝,火夜,水朝,水夜,木朝,木夜,金朝,金夜,ランク\n");
-    printf("氏名,学年,月朝,月夜,火朝,火夜,水朝,水夜,木朝,木夜,金朝,金夜,ランク\n");
+    if(d==10){
+    fprintf(fp,"氏名,学年,ランク,月朝,月夜,火朝,火夜,水朝,水夜,木朝,木夜,金朝,金夜\n");
+    printf("氏名,学年,ランク,月朝,月夜,火朝,火夜,水朝,水夜,木朝,木夜,金朝,金夜\n");
+    }else if(d==15){
+        fprintf(fp,"氏名,学年,ランク,月朝,月昼,月夜,火朝,火昼,火夜,水朝,水昼,水夜,木朝,木昼,木夜,金朝,金昼,金夜\n");
+        printf("氏名,学年,ランク,月朝,月昼,月夜,火朝,火昼,火夜,水朝,水昼,水夜,木朝,木昼,木夜,金朝,金昼,金夜\n");
+    }else{
+        printf("練習回数が不適です\n");
+        fclose(fp);
+        return -1;
+    }
     for(i=1;i<=people;i++){
-        fprintf(fp,"test%d,",i);printf("test%d,",i);
+        fprintf(fp,"test%d",i);printf("test%d",i);
         year = random_year((double)i/people);
-        fprintf(fp,"%d,",year);printf("%d,",year);
-        random_dayprint(daylist,fp);
-        for(j=0;j<DAY;j++){
-            fprintf(fp,"%d,",daylist[j]);printf("%d,",daylist[j]);
-        }
         rank = rand()%max_people+1;
-        fprintf(fp,"%d\n",rank);printf("%d\n",rank);
+        fprintf(fp,",%d",year);printf(",%d",year);
+        fprintf(fp,",%d",rank);printf(",%d",rank);
+        random_dayprint(daylist,fp,d);
+        for(j=0;j<d;j++){
+            fprintf(fp,",%d",daylist[j]);printf(",%d",daylist[j]);
+        }
+        fprintf(fp,"\n");printf("\n");
     }
     SAFE_FREE(daylist);
     fclose(fp);

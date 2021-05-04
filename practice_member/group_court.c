@@ -34,9 +34,16 @@ court new_court(info f,individual a,int day){
     }
     NEW(x->number,c);
     NEW(x->year,c);
-    NEW(x->num_of_court,4);
+    NEW(x->num_of_court,5);
     x->day = day;//練習日程
     x->sum_num = c;//練習参加人数
+    if((DAY==10 && day%2==0)||(DAY==15 && day%3==0)){
+        x->time = 0;
+    }else if(DAY==15 && day%3 ==1){
+        x->time = 1;
+    }else{
+        x->time = 2;
+    }
     c = 0;
     for(i=0;i<f->people;i++){
         if(a->list[i][day]==1){
@@ -72,6 +79,7 @@ player new_player(info f,individual a,court* courts,int number){
     if(count != play->count){
         printf("error in new_player.\n 世代%d,個体番号%d,選手No.%dの練習登録数が一致しません.\n",a->gene,a->number,number);
     }
+    play->score = -1;
     return play;
 }
 
@@ -131,6 +139,9 @@ void select_group(court x){
     int i;
     int *score;NEW(score,N);
     int *num = x->number;
+    if(x->time==2 && x->sum_num>8){
+        x->num_of_court[0] = 0;
+    }else{
     switch (x->sum_num) {
         //全体の人数ごとに面わけのパターンを考えランク差が少なくなるパターンを採用
         case 0: case 1: case 2: case 5:
@@ -142,12 +153,14 @@ void select_group(court x){
             for(i=0;i<x->sum_num/4;i++){
                 x->num_of_court[i] = 4;
             }
+            x->num_of_court[x->sum_num/4+1] = -1;
             break;
         case 3: case 6: case 9:
             //3人面のみ
             for(i=0;i<x->sum_num/3;i++){
                 x->num_of_court[i] = 3;
             }
+            x->num_of_court[x->sum_num/3+1] = -1;
             break;
         case 7:
             score[0] = num[4]-num[3]; //4-3で分けた場合
@@ -165,6 +178,7 @@ void select_group(court x){
                     printf("error in switch case 7\n");
                     break;
             }
+            x->num_of_court[2] = -1;
             break;
         case 10:
             score[0] = num[4]+num[7]-num[3]-num[6]; //4-3-3
@@ -190,6 +204,7 @@ void select_group(court x){
                     printf("error in switch case 10\n");
                     break;
             }
+            x->num_of_court[3] = -1;
             break;
         case 11:
             score[0] = num[4]+num[8]-num[3]-num[7]; //4-4-3
@@ -215,6 +230,7 @@ void select_group(court x){
                     printf("error in switch case 11\n");
                     break;
             }
+            x->num_of_court[3] = -1;
             break;
         case 13:
             score[0] = num[4]+num[7]+num[10]-num[3]-num[6]-num[9]; //4-3-3-3
@@ -250,6 +266,7 @@ void select_group(court x){
                     printf("error in switch case 13\n");
                     break;
             }
+            x->num_of_court[4] = -1;
             break;
         case 14:
             score[0] = num[4]+num[8]+num[11]-num[3]-num[7]-num[10]; //4-4-3-3
@@ -299,6 +316,7 @@ void select_group(court x){
                     printf("error in switch case 14\n");
                     break;
             }
+            x->num_of_court[4] = -1;
             break;
         case 15:
             score[0] = num[4]+num[8]+num[12]-num[3]-num[7]-num[11]; //4-4-4-3
@@ -334,9 +352,11 @@ void select_group(court x){
                     printf("error in switch case 14\n");
                 break;
             }
+            x->num_of_court[4] = -1;
         default:
             x->num_of_court[0] = 0;
             break;
+    }
     }
     SAFE_FREE(score);
 }

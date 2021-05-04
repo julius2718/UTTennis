@@ -21,6 +21,7 @@ void free_generation(info f,generation* g);
 void free_detail(info f,detail det);
 void free_info(info f);
 void free_personal(int people,personal* plist);
+void free_global(void);
 
 
 #endif /* free_h */

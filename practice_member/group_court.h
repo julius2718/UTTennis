@@ -20,18 +20,20 @@
 
 typedef struct{
     int day; //どの練習か.0<=j<DAY
+    int time;   //朝=0,昼=1,夜=2;
     int sum_num; //練習参加人数
     int *number; //info->listでの個人の番号.参加者のランクに相当
     int *year; //参加者の学年
-    int *num_of_court; //面の人数.3か4.面わけ不可の時は[0]=0
+    int *num_of_court; //面の人数.3か4.面わけ不可の時は[0]=0.末尾に-1
     double score; //練習スコア
 }*court;
 
 typedef struct{
     int number; //info->listでの個人の番号.ランクに相当
     int count; //練習回数
-    int* day_list;  //練習参加日
+    int* day_list;  //練習参加日.0~DAY-1
     int** members;  //参加練習の同じ面のリスト
+    double score;   //個人スコア
 }*player;
 
 typedef struct{

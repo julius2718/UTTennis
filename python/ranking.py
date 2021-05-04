@@ -26,7 +26,7 @@ def get_first_names(splitted_names):
 
 def process_ranking(group):
     gc = ga.gauth()
-    SPREADSHEET_KEY = 'YOUR_SHEETID_HERE' # コピーしたランク表のシートID
+    SPREADSHEET_KEY = '14bvDWMdB8sK0UkoCZ6qtt0dBdw6qeD8cORO0VhFtbbM' # コピーしたランク表のシートID
     worksheet = gc.open_by_key(SPREADSHEET_KEY).worksheet(group)
 
     df = DataFrame(worksheet.get_all_values())

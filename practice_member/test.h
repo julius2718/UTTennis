@@ -16,6 +16,6 @@
 #include <stdlib.h>
 #include "load_file.h"
 
-int make_testfile(int people);
-int make_testfile2(int people);
+int make_testfile(int people,int d);
+int make_testfile2(int people,int d);
 #endif /* test_h */

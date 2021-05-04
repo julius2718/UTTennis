@@ -40,10 +40,10 @@
                           |__scoring__(3)
  (3)遺伝的アルゴリズム,結果出力
  -scoring
-          |__result________________
-          |__first_generation______|
-          |__next_generation_______|
-                                   |_genetic_algorithm
+          |__result_scoring__result__
+          |__first_generation________|
+          |__next_generation_________|
+                                       |_genetic_algorithm
 
  */
 
@@ -109,3 +109,5 @@
 
 #include "root.h"
 
+int DAY = 10;
+char** DAY_LIST;

@@ -16,7 +16,7 @@ import ranking
 gc = ga.gauth()
 
 # Spreadsheetを取得
-SPREADSHEET_KEY = 'YOUR_SHEETID_HERE' # Google Formsの出力先シートのID
+SPREADSHEET_KEY = '1yQp6dA7wSn8_x3s2J26aDl4qSBsI0C69UGpq8BNKayk' # Google Formsの出力先シートのID
 worksheet = gc.open_by_key(SPREADSHEET_KEY).sheet1
 
 # ---ここからデータ処理---
@@ -26,7 +26,7 @@ df.columns = initial_columns_list
 df.drop(0, inplace=True)
 df.reset_index(inplace=True)
 df.drop('index', axis=1, inplace=True)
-df['学年'] = df['学年'].astype(int)
+df['氏名'] = df['学年'].astype(int)
 df['練習回数'] = df['希望する練習回数'].astype(int)
 
 days = ['月', '火', '水', '木', '金']

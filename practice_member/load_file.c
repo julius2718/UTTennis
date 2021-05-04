@@ -12,6 +12,7 @@
 
 #include "load_file.h"
 
+int first_line_check(char* str);
 personal make_person_data(char* str);
 int insert_personal(personal* plist,personal new);
 int print_person_data(personal* plist,int people);
@@ -24,8 +25,8 @@ int load_file(personal* plist,const char* fname){
     FILE *fp;
     int people = 0;
     char data[N];
-    char f_line[] = "氏名,学年,月朝,月夜,火朝,火夜,水朝,水夜,木朝,木夜,金朝,金夜,ランク\n";
     personal personal_data;
+    NEW(DAY_LIST,N);
     //ファイルの読み込み
     fp = fopen(fname,"r");  //fnameを読み込みモードで開く.返り値はFILE構造体のアドレス
     if(fp == NULL){ //ファイルが開けないとNULLを返す
@@ -36,13 +37,18 @@ int load_file(personal* plist,const char* fname){
         printf("succeed in file open! file name is %s\n",fname);
     }
     //1行目の形式の確認
-    if(fgets(data,N,fp)==NULL){ //一行目の読み込み
+    if(fgets(data,N,fp)==NULL){//一行目の読み込み
         printf("error in load_file.\n");
         printf(" 1行目が正常に読み込まれませんでした.ファイルを確認してください.\n");
         fclose(fp);return -1;
-    }else if(strcmp(data,f_line)!=0){
-        printf("caution in load_file!\n");
-        printf(" 1行目の書式を確認してください.正しく読み込めない可能性があります\n");
+    }else{
+        DAY = first_line_check(data);
+        RENEW(DAY_LIST,DAY);
+        if(DAY==-1){
+            printf("error in load_file.\n");
+            printf(" 1行目が正常に読み込まれませんでした.書式を確認してください.\n");
+            fclose(fp);return -1;
+        }
     }
     //2行目以降の確認&plistへの格納
     while(fgets(data,N,fp)!=NULL){  //一行ずつ読み込み,persondataに格納
@@ -59,6 +65,40 @@ int load_file(personal* plist,const char* fname){
     return people;
 }
 
+int first_line_check(char* str){
+    char name[N],rank[N],year[N],emp[N],tmp[N];
+    char _name[] = "氏名";
+    char _year[] = "学年";
+    char _rank[] = "ランク";
+    int i,k,num,ret;
+    i = 0;
+    num = -1;
+    ret = 2;
+    if(sscanf(str,"%[^,],%[^,],%[^,],",name,year,rank)!= 3)return -1;
+    if(strncmp(_name,name,strlen(_name))!=0||strncmp(_year,year,strlen(_year))!=0||strncmp(_rank,rank,strlen(_rank))!=0){
+        printf("caution in first_line_check.\n");
+        printf(" 1行目の書式に誤りがあり,正しく読み込めない可能性があります.\n");
+    }
+    for(k=0;k<2;k++){
+        while(i<strlen(str)&&str[i]!=','){str[i]=' ';i++;}
+        if(i<strlen(str))str[i]=' ';
+    }
+    printf("練習設定日時は");
+    while(ret == 2){
+        while(i<strlen(str)&&str[i]!=','){str[i]=' ';i++;}
+        num++;
+        ret = sscanf(str,"%[^,],%[^,\n]",emp,tmp);
+        if(i<strlen(str))str[i]=' ';
+        if(ret==2){
+            printf(",%s",tmp);
+            NEW(DAY_LIST[num],N);
+            memcpy(DAY_LIST[num],tmp,strlen(tmp));
+        }
+    }
+    printf(" の%d回です.\n",num);
+    return num;
+}
+
 
 personal make_person_data(char* str){
     //入力データの各行から各選手の情報をpersonalに格納する
@@ -66,15 +106,37 @@ personal make_person_data(char* str){
     personal data;
     NEW(data,1);
     NEW(data->name,N);
-    NEW(data->list,10);
-    int year,rank;
+    int tmp_list[N];
+    int ret,i,j;
+    i=0;j=-1;
+    /*
     if(sscanf(str,"%[^,],%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",data->name,&year,&data->list[0],&data->list[1],&data->list[2],&data->list[3],&data->list[4],&data->list[5],&data->list[6],&data->list[7],&data->list[8],&data->list[9],&rank)!=13){
         printf("error in make_person_data.\n");
         printf(" 入力データの読み込みに失敗しました.書式を確認してください.\n");
         return NULL;
     }
-    data->rank = rank;
-    data->year = year;
+    */
+    ret = sscanf(str,"%[^,],",data->name);
+    if(ret != 1){
+        printf("error in make_person_data.\n");
+        printf(" 入力データの読み込みに失敗しました.書式を確認してください.\n");
+        return NULL;
+    }
+    while(ret == 1){
+        j++;
+        while(i<strlen(str)&&str[i]!=','){str[i]=' ';i++;}
+        if(i<strlen(str))str[i]=' ';
+        ret = sscanf(str,"%d",&tmp_list[j]);
+    }
+    if(j != DAY+2){
+        printf("error in make_person_data.\n");
+        printf(" データ数の異なる行があります.入力を確認してください.\n");
+        return NULL;
+    }
+    NEW(data->list,DAY);
+    data->year = tmp_list[0];
+    data->rank = tmp_list[1];
+    for(i=0;i<DAY;i++)data->list[i]=tmp_list[i+2];
     //printf("%sのデータ読み込みが完了\n",data->name);
     return data;
 }
@@ -99,13 +161,12 @@ int print_person_data(personal* plist,int people){
     printf("***** check input deta *****\n");
     int i,p;
     int d;
-    char day[10][N] = {"月朝","月夜","火朝","火夜","水朝","水夜","木朝","木夜","金朝","金夜"};
     i=0;p=0;
     while(p<people){
         if(plist[i]!=NULL){
             printf("%s(%d年,%d位)の練習可能日程は",plist[i]->name,plist[i]->year,plist[i]->rank);
-            for(d=0;d<10;d++){
-                if(plist[i]->list[d]!=0)printf(" %s",day[d]);
+            for(d=0;d<DAY;d++){
+                if(plist[i]->list[d]!=0)printf(" %s",DAY_LIST[d]);
             }
             printf("です.\n");
             p++;

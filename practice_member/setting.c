@@ -27,14 +27,11 @@ court_rank set_court_rank(void){
 court_sum set_court_sum(void){
     //各練習の人数による評価.面わけ不能時の点数はマイナスに振り切った点数.4人面が多いと高評価
     //3人面の減点比率が大きいと,4人面が多い組み分けが出やすくなる
-    /*4人面の加点は1回の練習で1つまでなので,(3
-     加点が大きい設定時は4人面の日程がばらけやすくなる
-     (あまり意味はない)*/
     court_sum c_sum;
     NEW(c_sum,1);
     c_sum->impossible = -10000; //面分け不能時の減点係数
-    c_sum->three = -50;    //3人面での加減点
-    c_sum->four = 300;  //4人面での加点
+    c_sum->three = -200;    //3人面での加減点
+    c_sum->four = 100;  //4人面での加点
     return c_sum;
 }
 
@@ -54,18 +51,18 @@ personal_interval set_personal_interval(void){
     //各人の練習間隔による評価.
     //同日の練習や夜->朝は振り切った減点.
     //連日の練習も多少減点.重要度は低い
-    //2回の配分がや朝夜に分かれていたら加点.重要度は低い
+    //朝練連続or夜練連続で減点.重要度は低い
     //注:same_dayとnight_to_morningを同じにすると結果表示はずれるが問題ない
     personal_interval p_interval;
     NEW(p_interval,1);
-    p_interval->same_day = -10000;
-    p_interval->row_morning = -100;    //連続朝練での減点
-    p_interval->row_night = -100;  //連続夜練での減点
-    p_interval->morning_to_night = -50;   //連続朝->夜での減点
+    p_interval->same_day = -10000;  //同一日の練習による減点
+    p_interval->row_day = -100; //連日の練習による減点(夜->朝を除く)
     p_interval->night_to_morning = -5000;   //連続夜->朝での減点
     p_interval->two_morning = 0;    //2回朝練
+    p_interval->two_noon = 0;   //2回昼練
     p_interval->two_night = 0;  //2回夜練
-    p_interval->balance = 100;    //1回ずつ
+    p_interval->mon_morning = -50;  //月朝練習による追加減点
+    p_interval->fri_night = -50;  //金夜練習による追加減点
     return p_interval;
 }
 

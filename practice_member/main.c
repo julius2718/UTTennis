@@ -15,21 +15,21 @@
 
 int main(int argc, const char * argv[]) {
     srand((unsigned)time(NULL));
-    //make_testfile(30);
-    //make_testfile2(10);
+    if(make_testfile(30,15)<0)return EXIT_FAILURE;
+    //if(make_testfile2(30,10)<0)return EXIT_FAILURE;
      if(argc>1){
         genetic_algorithm(argv[1],0);
      }else{
          printf("入力が不正です.入力を確認してください.\n");
      }
-    return 0;
+     return 0;
 }
 
 /*整備記録
     #今後の課題,!解決済み,・作業内容
  !ごく稀にmember_listでerrorがでる->3/24に対処.根本原因はmallocとfreeにありそう.
  !入力から可能日程と2限抜け日程リストを作る
- 1/6:settingにてscoringのパラ設定を整理.
+  2020/1/6:settingにてscoringのパラ設定を整理.
     #c_sumの4人加点が面ごとではなくに日ごとのアンバランスになってる
     !点数の計算タイミングを考えてデータ構造を変更することで高速化できるかも.
      逐一計算になってる可能性
@@ -88,12 +88,30 @@ int main(int argc, const char * argv[]) {
   10/21
     ・1行目の形式エラーを警告に変更し処理を続行
     ・一部のprint後に一時停止を挿入
+  2021/4/29
+    ・設定日時を可変に(昼練なども可能に)
+        ・DAYをグローバル変数化(load_fileで取得)
+        ・入力形式の変更
+        ・testファイルを対応
+  5/3
+    ・設定日時を可変に(昼練なども可能に)
+        ・DAY_LISTをグローバル変数化(load_fileで取得)
+    ・練習間隔による評価計算を修正(3回練や朝昼夜練に対応)
+  5/4
+    ・二限抜けによる評価計算を修正(3回以上の練習に対応)
+    ・練習人数による評価計算を修正(朝昼夜練に対応)
+    ・スコア詳細のresultを大幅刷新(result_scoring.cに移行)
+    ・resultを朝昼夜練に対応
 */
 /*作業予定
 
-    #scoringの仕組みの簡略化(使用するデータ構造の簡略化)
     #性能比較用の関数の用意
     #出力ファイルの設定
     #3回練習に対応
     #入力でパラメータを変更できるようにする
+    #rankが小数や重複あっても許せるようにする
+    #設定日時可変に伴う変更
+        result.c        ->10日と15日用で別に作る
+    #二限抜による評価を個人スコアから練習スコアに移行(同じ面で多いと減点?)
+    #昼練に割り振られた場合の減点
  */

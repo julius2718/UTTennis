@@ -116,3 +116,10 @@ void free_personal(int people,personal* plist){
     }
     SAFE_FREE(plist);
 }
+
+void free_global(void){
+    //グローバル変数のfree
+    int i;
+    for(i=0;i<DAY;i++)SAFE_FREE(DAY_LIST[i]);
+    SAFE_FREE(DAY_LIST);
+}

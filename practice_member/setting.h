@@ -43,13 +43,13 @@ typedef struct{
 
 typedef struct{
     int same_day;   //同一日の練習での減点
-    int row_morning;    //連続朝練での減点
-    int row_night;  //連続夜練での減点
-    int morning_to_night;   //連続朝->夜での減点
+    int row_day;    //連日の練習での減点(夜->朝を除く)
     int night_to_morning;   //連続夜->朝での減点
     int two_morning;    //2回朝練
+    int two_noon;   //2回昼練
     int two_night;  //2回夜練
-    int balance;    //1回ずつ
+    int mon_morning;    //月朝による減点
+    int fri_night;  //金夜による追加減点
 }*personal_interval;
 
 typedef struct{

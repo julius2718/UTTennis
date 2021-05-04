@@ -41,6 +41,7 @@ void genetic_algorithm(const char* fname,int opt){
     print_generation(f,g);
     free_generation_(f,g);
     free_info(f);
+    free_global();
 }
 
 
