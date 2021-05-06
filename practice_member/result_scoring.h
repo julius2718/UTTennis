@@ -12,7 +12,6 @@
 #include <stdio.h>
 #include "scoring.h"
 
-void print_score_(info f,individual a);
 void print_score(info f,individual a);
 
 #endif /* result_scoring_h */

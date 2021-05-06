@@ -18,7 +18,7 @@ void print_generation(info f,generation g){
     printf("****** start printing result *****\n");
     print_csv(f,g->indi[g->max_indi]);sleep(1);
     printf("\nこの個体の点数の詳細です.\n");
-    print_score_(f,g->indi[g->max_indi]);sleep(1);
+    print_score(f,g->indi[g->max_indi]);sleep(1);
     printf("\nメーリス形式の出力です.\n");
     print_result(f,g->indi[g->max_indi]);
     printf("****** finish printing result *****\n");sleep(1);

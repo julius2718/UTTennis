@@ -52,7 +52,6 @@ personal_interval set_personal_interval(void){
     //同日の練習や夜->朝は振り切った減点.
     //連日の練習も多少減点.重要度は低い
     //朝練連続or夜練連続で減点.重要度は低い
-    //注:same_dayとnight_to_morningを同じにすると結果表示はずれるが問題ない
     personal_interval p_interval;
     NEW(p_interval,1);
     p_interval->same_day = -10000;  //同一日の練習による減点
@@ -89,6 +88,11 @@ personal_short_prac set_personal_short_prac(void){
 }
 
 //*******ここまで:scoringのパラメータ設定********
+
+
+
+
+
 score_data set_score(void);
 void separate_list(info f,personal* plist);
 int** make_daylist(int people,personal* plist);
@@ -215,19 +219,3 @@ int list_max(int* a,int n){
     return ans;
 }
 
-/*
-int print_info(info f){
-    //inputの確認用出力
-    int i,j;
-    char day[10][N] = {"月朝","月夜","火朝","火夜","水朝","水夜","木朝","木夜","金朝","金夜"};
-    printf("希望状況を出力します\n");
-    for(i=0;i<f->people;i++){
-        printf("%s(%d位,%d年)の練習可能日程は",f->name[i],f->rank[i],f->year[i]);
-        for(j=0;j<DAY;j++){
-            if(f->list[i][j]!=0)printf(",%s",day[j]);
-        }
-        printf("です.\n");
-    }
-    return 0;
-}
-*/

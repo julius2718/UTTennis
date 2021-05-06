@@ -82,7 +82,7 @@ double court_score_sum(info f,court x){
 }
 
 double court_score_year(info f,court x){
-    //面内の学年による評価.未設定
+    //面内の学年による評価.
     court_year data = f->score_data->c_year;
     double score=0;
     if(x->num_of_court[0]==0)return 0;

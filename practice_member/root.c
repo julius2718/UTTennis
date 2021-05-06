@@ -55,6 +55,7 @@
     -score_data:評価関数のパラメタ(setting.h)
         -court_rank         :面ごと>ランク差の評価パラメタ(setting.h)
         -court_sum          :面ごと>人数による評価パラメタ(setting.h)
+        -court_year         :面ごと>学年バランスによる評価パラメタ(setting.h)
         -personal_interval  :人ごと>練習間隔による評価パラメタ(setting.h)
         -personal_equality  :人ごと>練習メンバによる評価パラメタ(setting.h)
         -personal_short_prac:人ごと>2限抜けによる評価パラメタ(setting.h)

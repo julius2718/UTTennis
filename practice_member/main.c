@@ -15,7 +15,7 @@
 
 int main(int argc, const char * argv[]) {
     srand((unsigned)time(NULL));
-    if(make_testfile(30,15)<0)return EXIT_FAILURE;
+    //if(make_testfile(50,15)<0)return EXIT_FAILURE;
     //if(make_testfile2(30,10)<0)return EXIT_FAILURE;
      if(argc>1){
         genetic_algorithm(argv[1],0);
@@ -110,8 +110,6 @@ int main(int argc, const char * argv[]) {
     #3回練習に対応
     #入力でパラメータを変更できるようにする
     #rankが小数や重複あっても許せるようにする
-    #設定日時可変に伴う変更
-        result.c        ->10日と15日用で別に作る
-    #二限抜による評価を個人スコアから練習スコアに移行(同じ面で多いと減点?)
-    #昼練に割り振られた場合の減点
+ #二限抜による評価を個人スコアから練習スコアに移行(同じ面で多いと減点?)
+ #昼練に割り振られた場合の減点
  */
