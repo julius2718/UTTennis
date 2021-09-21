@@ -43,7 +43,7 @@
           |__result_scoring__result__
           |__first_generation________|
           |__next_generation_________|
-                                       |_genetic_algorithm
+                                       |_genetic_algorithm__test_algorithm
 
  */
 
@@ -108,7 +108,27 @@
     (1)個人スコアを計算
  */
 
+/*
+ オプション設定
+ 
+ -g :遺伝アルゴリズムのパラメータ変更メソッド呼び出し
+ -s :評価関数のパラメータ変更メソッド呼び出し
+ -r :繰り返し実行モード
+ ・
+ 
+ 
+ 
+ */
+
+
+
 #include "root.h"
 
 int DAY = 10;
 char** DAY_LIST;
+
+int MAX_GENE = 1000; //遺伝アルゴリズムの最大世代数.初代を0とする
+int N_GENE = 1000; //1世代の個体数
+double MUTATION = 0.01;   //突然変異による個体生成率
+double SELECTION = 0.7;   //選択による個体生成率
+double CROSSOVER = 0.1;   //交叉による個体生成時の部分突然変異率

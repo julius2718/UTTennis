@@ -18,8 +18,7 @@ court_rank set_court_rank(void){
     NEW(c_rank,1);
     c_rank->accept_number = 5;  //最大加点を与えるランク範囲n1
     c_rank->add_point = 600;    //ランク差が規定内の時の最大加点max
-    c_rank->deduce_point1 = -200;   //ランク差がある時の減点比率d1
-    c_rank->deduce_point2 = -1000;   //ランク差がより大きい時の減点比率d2
+    c_rank->deduce_point = -1000;   //ランク差がより大きい時の減点比率d2
     c_rank->limit_number = 10;   //減点比率の境界点n2
     return c_rank;
 }
@@ -30,8 +29,8 @@ court_sum set_court_sum(void){
     court_sum c_sum;
     NEW(c_sum,1);
     c_sum->impossible = -10000; //面分け不能時の減点係数
-    c_sum->three = -200;    //3人面での加減点
-    c_sum->four = 100;  //4人面での加点
+    c_sum->three = 0;    //3人面での加減点
+    c_sum->four = 500;  //4人面での加点
     return c_sum;
 }
 
@@ -55,8 +54,8 @@ personal_interval set_personal_interval(void){
     personal_interval p_interval;
     NEW(p_interval,1);
     p_interval->same_day = -10000;  //同一日の練習による減点
-    p_interval->row_day = -100; //連日の練習による減点(夜->朝を除く)
     p_interval->night_to_morning = -5000;   //連続夜->朝での減点
+    p_interval->row_day = -100; //連日の練習による減点(夜->朝を除く)
     p_interval->two_morning = 0;    //2回朝練
     p_interval->two_noon = 0;   //2回昼練
     p_interval->two_night = 0;  //2回夜練
@@ -70,10 +69,10 @@ personal_equality set_personal_equality(void){
     //比率を大きくすると,下の人としか練習できない人が減る.
     personal_equality p_equal;
     NEW(p_equal,1);
+    p_equal->not_consider = 1;  //考慮しない最大ランク
     p_equal->up_rank = 5;   //ボーナスが入るランク差
     p_equal->up_point = 100;    //up_rank以上上とできるときのボーナス
     p_equal->down_point = -300; //上の人とできない場合の減点
-    p_equal->not_consider = 1;  //考慮しない最大ランク
     return p_equal;
 }
 
@@ -83,7 +82,7 @@ personal_short_prac set_personal_short_prac(void){
     personal_short_prac p_short;
     NEW(p_short,1);
     p_short->single_short = -100;   //1回二限抜けする場合
-    p_short->double_short = -300;   //2回二限抜けする場合
+    p_short->double_short = -300;   //2回以上二限抜けする場合の減点比率
     return p_short;
 }
 
@@ -122,7 +121,11 @@ info info_build(int people,personal* plist){
             if(f->list[i][j] == 1)c++;
             if(f->list[i][j] == -1)cf++;
         }
-        f->count_prac[i] = 2;   //今後3回練にも対応予定.
+        if(c+cf>1){
+            f->count_prac[i] = 2;   //今後3回練にも対応予定.
+        }else{
+            f->count_prac[i] = c+cf;    //可能練習回数が1回以下の場合
+        }
         f->count_can[i] = c;
         f->count_fix[i] = cf;
         while(plist[p]==NULL)p++;

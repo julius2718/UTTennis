@@ -96,6 +96,7 @@ void print_score_court_sum(court_sum data,detail det){
         j = 0;
         tmp = det->courts[i]->num_of_court[j];
         if(tmp == 0){
+            if(det->courts[i]->sum_num==0)continue;
             imp[0]++;
             imp[i+1]=1;
             score += data->impossible;

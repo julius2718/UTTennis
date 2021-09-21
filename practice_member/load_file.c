@@ -87,7 +87,7 @@ int first_line_check(char* str){
     while(ret == 2){
         while(i<strlen(str)&&str[i]!=','){str[i]=' ';i++;}
         num++;
-        ret = sscanf(str,"%[^,],%[^,\n]",emp,tmp);
+        ret = sscanf(str,"%[^,],%[^,\r\n]",emp,tmp);
         if(i<strlen(str))str[i]=' ';
         if(ret==2){
             printf(",%s",tmp);
@@ -109,13 +109,6 @@ personal make_person_data(char* str){
     int tmp_list[N];
     int ret,i,j;
     i=0;j=-1;
-    /*
-    if(sscanf(str,"%[^,],%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",data->name,&year,&data->list[0],&data->list[1],&data->list[2],&data->list[3],&data->list[4],&data->list[5],&data->list[6],&data->list[7],&data->list[8],&data->list[9],&rank)!=13){
-        printf("error in make_person_data.\n");
-        printf(" 入力データの読み込みに失敗しました.書式を確認してください.\n");
-        return NULL;
-    }
-    */
     ret = sscanf(str,"%[^,],",data->name);
     if(ret != 1){
         printf("error in make_person_data.\n");

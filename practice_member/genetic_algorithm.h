@@ -15,6 +15,7 @@
 #include "result.h"
 
 void genetic_algorithm(const char* fname,int opt);
+info preprocessing(const char* fname);
 
 
 #endif /* genetic_algorithm_h */

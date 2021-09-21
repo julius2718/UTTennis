@@ -21,8 +21,7 @@
 typedef struct{
     //court_score_rankでの点数決定係数
     int add_point;  //ランク差が規定内の時の最大加点
-    int deduce_point1;   //ランク差がある時の減点比率
-    int deduce_point2;  //ランク差がより大きい時の減点比率
+    int deduce_point;  //ランク差がより大きい時の減点比率
     int accept_number;  //最大加点を与えるランク範囲
     int limit_number;   //減点比率の臨界点
 }*court_rank;
@@ -53,10 +52,10 @@ typedef struct{
 }*personal_interval;
 
 typedef struct{
+    int not_consider;   //考慮しない最大ランク
     int up_rank; //ボーナスが入るランク差
     int up_point;   //up_rank以上上とできるときのボーナス
     int down_point; //上の人とできない場合の減点
-    int not_consider;   //考慮しない最大ランク
 }*personal_equality;
 
 typedef struct{

@@ -25,10 +25,10 @@
 extern int DAY; //練習数(月~金の朝夜で10回):変更時は諸々のコード改変が必要
 extern char** DAY_LIST;  //練習設定日の文字列.load_file.cで代入
 
-#define MAX_GENE 1000 //遺伝アルゴリズムの最大世代数.初代を0とする
-#define N_GENE 1000 //1世代の個体数
-#define MUTATION 0.01   //突然変異による個体生成率
-#define SELECTION 0.7   //選択による個体生成率
-#define CROSSOVER 0.1   //交叉による個体生成時の部分突然変異率
+extern int MAX_GENE; //遺伝アルゴリズムの最大世代数.初代を0とする
+extern int N_GENE; //1世代の個体数
+extern double MUTATION;  //突然変異による個体生成率
+extern double SELECTION;  //選択による個体生成率
+extern double CROSSOVER;  //交叉による個体生成時の部分突然変異率
 
 #endif /* root_h */

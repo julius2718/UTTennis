@@ -21,7 +21,8 @@ individual select_individual(info f,generation g){
             return a;
         }
     }
-    printf("error in select_individual.抽選値pを確認してください.\n");
+    
+    printf("error in select_individual.抽選値pを確認してください.p=%f,sum=%f\n",p,sum);
     return a;
 }
 

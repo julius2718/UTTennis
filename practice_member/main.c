@@ -9,20 +9,59 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "genetic_algorithm.h"
+#include <unistd.h>
+#include "options.h"
+#include "test_algorithm.h"
 #include "test.h"
 
 
-int main(int argc, const char * argv[]) {
+int main(int argc, char * argv[]) {
     srand((unsigned)time(NULL));
+    //------------------------------------------
+    //入力の確認
+    //------------------------------------------
+    
+    int geneopt,scoreopt,opt;
+    const char* optstring = "gs";
+    geneopt=0;scoreopt=0;
+    while((opt = getopt(argc,argv,optstring))!=-1){
+        switch (opt){
+            case 'g':
+                geneopt = 1;
+                break;
+            case 's':
+                scoreopt = 1;
+                break;
+            default:
+                printf("error! \'%c\' \'%c\'\n", opt, optopt);
+                return 1;
+        }
+    }
+    //------------------------------------------
+    //オプション操作の実行
+    //------------------------------------------
+    if(geneopt == 1){
+        change_gene_parameter();
+    }
+    //------------------------------------------
+    //テストファイルの作成
+    //------------------------------------------
     //if(make_testfile(50,15)<0)return EXIT_FAILURE;
     //if(make_testfile2(30,10)<0)return EXIT_FAILURE;
+    
+    //------------------------------------------
+    //遺伝アルゴリズムによる練習日程の作成
+    //------------------------------------------
      if(argc>1){
-        genetic_algorithm(argv[1],0);
+        genetic_algorithm(argv[argc-1],0);
      }else{
          printf("入力が不正です.入力を確認してください.\n");
      }
-     return 0;
+    //------------------------------------------
+    //性能評価用の繰り返し関数
+    //------------------------------------------
+    //simple_genetic(argv[argc-1],0,5);
+    return 0;
 }
 
 /*整備記録
@@ -102,14 +141,29 @@ int main(int argc, const char * argv[]) {
     ・練習人数による評価計算を修正(朝昼夜練に対応)
     ・スコア詳細のresultを大幅刷新(result_scoring.cに移行)
     ・resultを朝昼夜練に対応
+  5/7
+    ・改行コード\r\cに対応
+    ・練習可能回数が1回以下に対応
+    ・練習がない回を減点していた仕様を修正
+  5/25
+    ・court_rankの評価計算式を変更
+  5/26
+    ・性能評価用のメソッドをtest_algorithmに追加
+    ・各個体の選出確率を定めるrankの計算方式を0にならないように修正.(scoring.c)
+  5/27
+    ・遺伝アルゴリズムのパラメータを定数(#define)からグローバル変数(extern)に変更
+  9/21
+    ・遺伝アルゴリズムのパラメータを入力で変更できるオプションを追加(options.c)
+    (試作につきrootへの記載は後日)
 */
 /*作業予定
-
-    #性能比較用の関数の用意
-    #出力ファイルの設定
-    #3回練習に対応
     #入力でパラメータを変更できるようにする
+        #rootへの仕様の記載
+        #遺伝アルゴリズム・評価関数のパラメータ変更モードの追加
+        #性能比較モードの追加
+        #コードの整理
+    #3回練習に対応
     #rankが小数や重複あっても許せるようにする
- #二限抜による評価を個人スコアから練習スコアに移行(同じ面で多いと減点?)
- #昼練に割り振られた場合の減点
+    #二限抜による評価を個人スコアから練習スコアに移行(同じ面で多いと減点?)
+    #昼練に割り振られた場合の減点
  */

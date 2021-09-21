@@ -31,7 +31,7 @@ double court_score_rank(info f,court x){
     //各面内のランク差による点数
     court_rank data = f->score_data->c_rank;
     int acp = data->accept_number;int lim = data->limit_number;
-    int ded1 = data->deduce_point1;int ded2 = data->deduce_point2;
+    int ded = data->deduce_point;
     if(x->num_of_court[0]==0)return 0; //面が存在しなければ無視
     int i,min_i,max_i,dif;
     double score = 0;
@@ -39,12 +39,21 @@ double court_score_rank(info f,court x){
     while(min_i<x->sum_num){
         max_i = min_i + x->num_of_court[i]-1;
         dif = x->number[max_i]-x->number[min_i];  //面内の最大ランク差
+        /*旧計算式
         if(dif<=acp){
             score += data->add_point; //面内の最大ランク差が5以下なら500点
         }else if(dif<=lim){
             score += data->add_point + (dif - acp)*ded1; //ランクが離れるほど減点
         }else{
             score += data->add_point + (lim - acp)*ded1 + (dif - lim)*ded2;
+        }
+        */
+        if(dif<=acp){
+            score += data->add_point; //面内の最大ランク差が5以下なら500点
+        }else if(dif<=lim){
+            score += data->add_point * (double)(dif - acp)/(lim - acp); //ランクが離れるほど減点
+        }else{
+            score += (dif - lim)*ded;
         }
         i++;
         min_i = max_i +1;
@@ -64,6 +73,8 @@ double court_score_sum(info f,court x){
         }else if(x->time==2 && x->sum_num>8){
             //-溢れた人数*10000点(夜)
             score += (x->sum_num-8) * data->impossible;
+        }else if(x->sum_num==0){
+            score += 0;
         }else{
             score += data->impossible; //面分け不能時の減点
         }

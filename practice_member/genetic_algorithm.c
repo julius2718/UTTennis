@@ -8,21 +8,17 @@
 
 #include "genetic_algorithm.h"
 
+info preprocessing(const char* fname);
+
 //メインの関数.ファイルの読み込みから結果の出力まで
 //opt=0:通常仕様
 //opt=1:常にランダム生成の遺伝アルゴリズム.テスト比較用
 void genetic_algorithm(const char* fname,int opt){
-    int i,people;
-    personal* personal_list;
+    int i;
     info f;
     generation g,g_old;
-    NEW(personal_list,max_people);NEW(g,MAX_GENE+1);
-    for(i=0;i<max_people;i++)personal_list[i]=NULL;
-    //ファイルの読み込み,入力の設定
-    people = load_file(personal_list,fname);
-    if(people==-1)exit(EXIT_FAILURE);//エラー終了
-    f = info_build(people,personal_list);
-    free_personal(people,personal_list);    //personal_listはinfo_buildで用済み
+    NEW(g,MAX_GENE+1);
+    f = preprocessing(fname);
     //初代の作成
     g = first_generation(f);
     //print_generation(f,g[0]);
@@ -46,3 +42,17 @@ void genetic_algorithm(const char* fname,int opt){
 
 
 
+
+info preprocessing(const char* fname){
+    int i,people;
+    personal* personal_list;
+    info f;
+    NEW(personal_list,max_people);
+    for(i=0;i<max_people;i++)personal_list[i]=NULL;
+    //ファイルの読み込み,入力の設定
+    people = load_file(personal_list,fname);
+    if(people==-1)exit(EXIT_FAILURE);//エラー終了
+    f = info_build(people,personal_list);
+    free_personal(people,personal_list);    //personal_listはinfo_buildで用済み
+    return f;
+}

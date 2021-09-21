@@ -26,17 +26,22 @@ void rank_build(info f,generation g){
     //g->max_indi:score最大のindividualのnumber
     int i,max_i = 0;
     double sum = 0;
+    double basic = 0.1;
     double min_score = 0;
     for(i=0;i<N_GENE;i++){
         if(min_score > g->indi[i]->score) min_score = g->indi[i]->score;
         if(g->indi[max_i]->score < g->indi[i]->score) max_i = i;
     }
     for(i=0;i<N_GENE;i++){
-        //最低点が0になるように補正
         sum += g->indi[i]->score - min_score;
     }
     for(i=0;i<N_GENE;i++){
-        g->rank[i] = (g->indi[i]->score - min_score)/sum;
+        //最低点がbasic/N_GENEになるように補正
+        if(sum==0){
+            g->rank[i] = (double)1/N_GENE;//全てのスコアが一致した時
+        }else{
+            g->rank[i] = basic/N_GENE + (g->indi[i]->score - min_score)/sum*(1-basic);
+        }
     }
     g->max_indi = max_i;
 }
